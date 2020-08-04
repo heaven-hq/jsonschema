@@ -7,6 +7,7 @@ from warnings import warn
 import contextlib
 import json
 import numbers
+import copy
 
 from six import add_metaclass
 
@@ -661,6 +662,7 @@ class RefResolver(object):
         )
         self.store.update(store)
         self.store[base_uri] = referrer
+        self.store_subschema(referrer)
 
         self._urljoin_cache = urljoin_cache
         self._remote_cache = remote_cache
@@ -868,6 +870,37 @@ class RefResolver(object):
         if self.cache_remote:
             self.store[uri] = result
         return result
+
+    def store_subschema(self, schema, last_schema=None, last_url=None):
+        """
+        Using $id or id with $ref, save subschema to self.store
+        Arguments:
+            schema:
+                The referring schema.
+            last_schema:
+                The referring upper level schema.
+            last_url:
+                Save the last URL.
+        """
+        if schema is None or isinstance(schema, bool) or self.resolution_scope in ["http://json-schema.org/draft-03/schema#", "http://json-schema.org/draft-04/schema#", "http://json-schema.org/draft-06/schema#", "http://json-schema.org/draft-07/schema#"]:
+            return        
+        #if isinstance(schema, bool) or schema.get(u"schema") in meta_schemas:
+        #    return
+        for k in schema.keys():
+            if k in [u"id", u"$id"] and isinstance(schema[k], str_types):
+
+                last_url = urljoin(last_url, schema[k], allow_fragments=True)
+                url, fragment = urldefrag(last_url)
+
+                if last_schema:
+                    self.store[url] = last_schema
+
+                if fragment:
+                    self.store[url][fragment] = schema
+
+            backup_schema = copy.deepcopy(schema)
+            if isinstance(schema[k], dict):
+                self.store_subschema(schema[k], backup_schema, last_url)
 
 
 def validate(instance, schema, cls=None, *args, **kwargs):
