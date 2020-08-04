@@ -36,7 +36,10 @@ from jsonschema.compat import (
 # Imported for backwards compatibility.
 from jsonschema.exceptions import ErrorTree
 ErrorTree
-
+list_schema = ["http://json-schema.org/draft-03/schema#", 
+               "http://json-schema.org/draft-04/schema#",
+               "http://json-schema.org/draft-06/schema#",
+               "http://json-schema.org/draft-07/schema#"]
 
 class _DontDoThat(Exception):
     """
@@ -871,15 +874,16 @@ class RefResolver(object):
             self.store[uri] = result
         return result
 
-    list_schema = ["http://json-schema.org/draft-03/schema#", "http://json-schema.org/draft-04/schema#", "http://json-schema.org/draft-06/schema#", "http://json-schema.org/draft-07/schema#"]
     def store_subschema(self, schema, last_schema=None, last_url=None):
         """
         Using $id or id with $ref, save subschema to self.store
         Arguments:
             schema:
                 The referring schema.
+
             last_schema:
                 The referring upper level schema.
+
             last_url:
                 Save the last URL.
         """
