@@ -871,6 +871,7 @@ class RefResolver(object):
             self.store[uri] = result
         return result
 
+    list_schema = ["http://json-schema.org/draft-03/schema#", "http://json-schema.org/draft-04/schema#", "http://json-schema.org/draft-06/schema#", "http://json-schema.org/draft-07/schema#"]
     def store_subschema(self, schema, last_schema=None, last_url=None):
         """
         Using $id or id with $ref, save subschema to self.store
@@ -882,9 +883,9 @@ class RefResolver(object):
             last_url:
                 Save the last URL.
         """
-        if schema is None or isinstance(schema, bool) or self.resolution_scope in ["http://json-schema.org/draft-03/schema#", "http://json-schema.org/draft-04/schema#", "http://json-schema.org/draft-06/schema#", "http://json-schema.org/draft-07/schema#"]:
-            return        
-        #if isinstance(schema, bool) or schema.get(u"schema") in meta_schemas:
+        if schema is None or isinstance(schema, bool) or self.resolution_scope in list_schema:
+            return
+        # if isinstance(schema, bool) or schema.get(u"schema") in meta_schemas:
         #    return
         for k in schema.keys():
             if k in [u"id", u"$id"] and isinstance(schema[k], str_types):
