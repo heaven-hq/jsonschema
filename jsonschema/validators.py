@@ -36,10 +36,11 @@ from jsonschema.compat import (
 # Imported for backwards compatibility.
 from jsonschema.exceptions import ErrorTree
 ErrorTree
-list_schema = ["http://json-schema.org/draft-03/schema#", 
+list_schema = ["http://json-schema.org/draft-03/schema#",
                "http://json-schema.org/draft-04/schema#",
                "http://json-schema.org/draft-06/schema#",
                "http://json-schema.org/draft-07/schema#"]
+
 
 class _DontDoThat(Exception):
     """
@@ -887,7 +888,8 @@ class RefResolver(object):
             last_url:
                 Save the last URL.
         """
-        if schema is None or isinstance(schema, bool) or self.resolution_scope in list_schema:
+        if schema is None or isinstance(schema, bool) \
+                or self.resolution_scope in list_schema:
             return
         # if isinstance(schema, bool) or schema.get(u"schema") in meta_schemas:
         #    return
