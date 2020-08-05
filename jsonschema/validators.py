@@ -888,7 +888,7 @@ class RefResolver(object):
             last_url:
                 Save the last URL.
         """
-        if schema is None or isinstance(schema, bool) \
+        if not isinstance(schema, dict) \
                 or self.resolution_scope in list_schema:
             return
         # if isinstance(schema, bool) or schema.get(u"schema") in meta_schemas:
