@@ -7,7 +7,6 @@ from warnings import warn
 import contextlib
 import json
 import numbers
-import copy
 
 from six import add_metaclass
 
@@ -897,7 +896,7 @@ class RefResolver(object):
                 or self.resolution_scope in list_schema:
             return
 
-        for k in schema.keys():
+        for k in list(schema.keys()):
             if k in [u"id", u"$id"] and isinstance(schema[k], str_types):
 
                 last_url = urljoin(last_url, schema[k], allow_fragments=True)
@@ -909,9 +908,8 @@ class RefResolver(object):
                 if fragment:
                     self.store[url][fragment] = schema
 
-            backup_schema = copy.deepcopy(schema)
             if isinstance(schema[k], dict):
-                self.store_subschema(schema[k], backup_schema, last_url)
+                self.store_subschema(schema[k], schema, last_url)
 
 
 def validate(instance, schema, cls=None, *args, **kwargs):
