@@ -897,14 +897,13 @@ class RefResolver(object):
                 url, fragment = urldefrag(last_url)
 
                 if last_schema:
-                    self.store[url] = last_schema
+                    self.store[url] = copy.deepcopy(last_schema)
 
                 if fragment:
-                    self.store[url][fragment] = schema
+                    self.store[url][fragment] = copy.deepcopy(schema)
 
-            backup_schema = copy.deepcopy(schema)
             if isinstance(schema[k], dict):
-                self.store_subschema(schema[k], backup_schema, last_url)
+                self.store_subschema(schema[k], schema, last_url)
 
 
 def validate(instance, schema, cls=None, *args, **kwargs):
