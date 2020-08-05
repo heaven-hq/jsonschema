@@ -659,7 +659,7 @@ class RefResolver(object):
         )
         self.store.update(store)
         self.store[base_uri] = referrer
-        self.store_subschema(referrer)
+        self.store_subschema(referrer, last_url=base_uri)
 
         self._urljoin_cache = urljoin_cache
         self._remote_cache = remote_cache
