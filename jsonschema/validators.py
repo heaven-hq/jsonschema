@@ -878,9 +878,9 @@ class RefResolver(object):
     def store_subschema(self, schema, last_schema=None, last_url=None):
         """
         Using $id or id with $ref, save subschema to self.store
-        
+
         Arguments:
-        
+
             schema:
 
                 The referring schema.
