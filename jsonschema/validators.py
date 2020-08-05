@@ -889,10 +889,9 @@ class RefResolver(object):
                 Save the last URL.
         """
         if not isinstance(schema, dict) \
-                or self.resolution_scope in list_schema:
+                or schema.get(u"schema") in meta_schemas:
             return
-        # if isinstance(schema, bool) or schema.get(u"schema") in meta_schemas:
-        #    return
+
         for k in schema.keys():
             if k in [u"id", u"$id"] and isinstance(schema[k], str_types):
 
