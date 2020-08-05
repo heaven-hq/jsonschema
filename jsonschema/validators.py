@@ -878,20 +878,23 @@ class RefResolver(object):
     def store_subschema(self, schema, last_schema=None, last_url=None):
         """
         Using $id or id with $ref, save subschema to self.store
+        
         Arguments:
+        
             schema:
+
                 The referring schema.
 
             last_schema:
+
                 The referring upper level schema.
 
             last_url:
+
                 Save the last URL.
         """
-        if schema == None:
-            return
         if not isinstance(schema, dict) \
-                or schema.get(u"schema") in meta_schemas:
+                or self.resolution_scope in list_schema:
             return
 
         for k in schema.keys():
