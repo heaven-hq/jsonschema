@@ -868,7 +868,7 @@ class RefResolver(object):
             self.store[uri] = result
         return result
 
-    def store_subschema(self, schema, last_schema=None, last_url=None):
+    def store_subschema(self, schema, last_url=None):
         """
         Using $id or id with $ref, save subschema to self.store
 
@@ -878,13 +878,9 @@ class RefResolver(object):
 
                 The referring schema.
 
-            last_schema:
-
-                The referring upper level schema.
-
             last_url:
 
-                Save the last URL.
+                The last url.
         """
         if not isinstance(schema, dict) \
                 or self.resolution_scope in list_schema:
@@ -892,18 +888,20 @@ class RefResolver(object):
 
         for k in schema.keys():
             if k in [u"id", u"$id"] and isinstance(schema[k], str_types):
-
+                #Splicing the url in the last id with the url in this id,
+                #and store last_url at the same time.
                 last_url = urljoin(last_url, schema[k], allow_fragments=True)
                 url, fragment = urldefrag(last_url)
 
-                if last_schema:
-                    self.store[url] = copy.deepcopy(last_schema)
+                #Save the schema into self.store[url]
+                self.store[url] = copy.deepcopy(schema)
 
+                #Add fragment element in self.store[url]
                 if fragment:
                     self.store[url][fragment] = copy.deepcopy(schema)
 
             if isinstance(schema[k], dict):
-                self.store_subschema(schema[k], schema, last_url)
+                self.store_subschema(schema[k], last_url)
 
 
 def validate(instance, schema, cls=None, *args, **kwargs):
