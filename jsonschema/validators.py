@@ -887,7 +887,7 @@ class RefResolver(object):
             return
 
         for k in schema.keys():
-            if k in [u"id", u"$id"] and isinstance(schema[k], str_types):
+            if k in [u"id", u"$id"] and isinstance(schema[k], str):
                 #Splicing the url in the last id with the url in this id,
                 #and store last_url at the same time.
                 last_url = urljoin(last_url, schema[k], allow_fragments=True)
